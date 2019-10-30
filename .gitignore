@@ -1,0 +1,3 @@
+#ignore passwords file
+ESP32/**/Passwords.h
+ESP8266/**/Passwords.h
