@@ -60,11 +60,11 @@ void loop()
     Serial.println(msg.data());
 
     // return echo
-    client.send("Echo: " + msg.data());
+    // client.send("Echo: " + msg.data());
 
     // close the connection
     client.close();
     }
 
-    delay(1000);
+    // delay(1000);
   }

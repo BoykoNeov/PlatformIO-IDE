@@ -12,6 +12,9 @@ const char* password =  password2;
  
 AsyncWebServer server(80);
 
+using namespace websockets;
+WebsocketsServer WSserver;
+
 void setup()
 {
     Serial.begin(115200);
@@ -42,6 +45,10 @@ void setup()
     });
    
     server.begin();
+
+  WSserver.listen(81);
+  Serial.print("Is WebSocketserver live? ");
+  Serial.println(WSserver.available());
 }
 
 void loop()

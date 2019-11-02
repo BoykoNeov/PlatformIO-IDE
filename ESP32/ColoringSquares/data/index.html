@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body onload="javascript:init()">
 
 <div class="grid-container">
     <div class="grid-item">1</div>
@@ -118,18 +118,33 @@
 <h1>Green:</h1>
 
 <div class="slidecontainer">
-        <input type="range" min="0" max="255" value="10" class="slider" id="greenRange">
-        <p>Value: <span id="greenValue"></span></p>
+  <input type="range" min="0" max="255" value="10" class="slider" id="greenRange">
+  <p>Value: <span id="greenValue"></span></p>
 </div>
 
 <h1>Blue:</h1>
 
 <div class="slidecontainer">
-            <input type="range" min="0" max="255" value="10" class="slider" id="blueRange">
-            <p>Value: <span id="blueValue"></span></p>
+    <input type="range" min="0" max="255" value="10" class="slider" id="blueRange">
+    <p>Value: <span id="blueValue"></span></p>
 </div>
 
 <script>
+
+// Initialize websocket
+var socket;
+function init() 
+{
+socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+}
+
+//TODO
+function sendText() 
+{
+  Socket.send(document.getElementById("txBar").value);
+  document.getElementById("txBar").value = "";
+}
+
 var slider = document.getElementById("redRange");
 var output = document.getElementById("redValue");
 output.innerHTML = slider.value;
@@ -157,40 +172,43 @@ slider3.oninput = function()
   output3.innerHTML = this.value;
   }
 
-    var rgbToHex = function (rgb) { 
+var rgbToHex = function (rgb) 
+  {
     var hex = Number(rgb).toString(16);
-    if (hex.length < 2) {
-         hex = "0" + hex;
+    if (hex.length < 2) 
+    {
+      hex = "0" + hex;
     }
     return hex;
   };
 
-      var fullColorHex = function(r,g,b) {   
-      var red = rgbToHex(r);
-      var green = rgbToHex(g);
-      var blue = rgbToHex(b);
-      return red+green+blue;
-    };
+var fullColorHex = function(r,g,b)
+  {
+  var red = rgbToHex(r);
+  var green = rgbToHex(g);
+  var blue = rgbToHex(b);
+  return red+green+blue;
+  };
 
-  var redArray = [];
-  var greenArray = [];
-  var blueArray = [];
+var redArray = [];
+var greenArray = [];
+var blueArray = [];
 
-      var grid = document.getElementsByClassName('grid-item');
-      Array.from(grid).forEach(v => v.addEventListener('click', function() 
-      {
-        var red = document.getElementById("redRange").value;
-        var green = document.getElementById("greenRange").value;
-        var blue = document.getElementById("blueRange").value;
-        var currentColor = fullColorHex(red, green, blue);
+var grid = document.getElementsByClassName('grid-item');
+Array.from(grid).forEach(v => v.addEventListener('click', function() 
+  {
+  var red = document.getElementById("redRange").value;
+  var green = document.getElementById("greenRange").value;
+  var blue = document.getElementById("blueRange").value;
+  var currentColor = fullColorHex(red, green, blue);
 
-        var vNum = parseInt(v.innerHTML);
-        redArray[vNum - 1] = red;
-        greenArray[vNum - 1] = green;
-        blueArray[vNum - 1] = blue;
+  var vNum = parseInt(v.innerHTML);
+  redArray[vNum - 1] = red;
+  greenArray[vNum - 1] = green;
+  blueArray[vNum - 1] = blue;
 
-        v.style.background = "#" + currentColor;
-      }));
+  v.style.background = "#" + currentColor;
+  }));
 </script>
 
 </body>
