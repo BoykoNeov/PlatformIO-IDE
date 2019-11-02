@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div class="grid-container">
+    <div class="grid-item">1</div>
+    <div class="grid-item">2</div>
+    <div class="grid-item">3</div>  
+    <div class="grid-item">4</div>
+    <div class="grid-item">5</div>
+    <div class="grid-item">6</div>  
+    <div class="grid-item">7</div>
+    <div class="grid-item">8</div>
+    <div class="grid-item">9</div>
+    <div class="grid-item">10</div>
+    <div class="grid-item">11</div>
+    <div class="grid-item">12</div>
+    <div class="grid-item">13</div>  
+    <div class="grid-item">14</div>
+    <div class="grid-item">15</div>
+    <div class="grid-item">16</div>  
+    <div class="grid-item">17</div>
+    <div class="grid-item">18</div>
+    <div class="grid-item">19</div>
+    <div class="grid-item">20</div>
+    <div class="grid-item">21</div>
+    <div class="grid-item">22</div>
+    <div class="grid-item">23</div>  
+    <div class="grid-item">24</div>
+    <div class="grid-item">25</div>
+    <div class="grid-item">26</div>  
+    <div class="grid-item">27</div>
+    <div class="grid-item">28</div>
+    <div class="grid-item">29</div>
+    <div class="grid-item">30</div>
+    <div class="grid-item">31</div>
+    <div class="grid-item">32</div>
+    <div class="grid-item">33</div>  
+    <div class="grid-item">34</div>
+    <div class="grid-item">35</div>
+    <div class="grid-item">36</div>  
+    <div class="grid-item">37</div>
+    <div class="grid-item">38</div>
+    <div class="grid-item">39</div>
+    <div class="grid-item">40</div>
+    <div class="grid-item">41</div>
+    <div class="grid-item">42</div>
+    <div class="grid-item">43</div>  
+    <div class="grid-item">44</div>
+    <div class="grid-item">45</div>
+    <div class="grid-item">46</div>  
+    <div class="grid-item">47</div>
+    <div class="grid-item">48</div>
+    <div class="grid-item">49</div>
+    <div class="grid-item">50</div>
+    <div class="grid-item">51</div>
+    <div class="grid-item">52</div>
+    <div class="grid-item">53</div>  
+    <div class="grid-item">54</div>
+    <div class="grid-item">55</div>
+    <div class="grid-item">56</div>  
+    <div class="grid-item">57</div>
+    <div class="grid-item">58</div>
+    <div class="grid-item">59</div>
+    <div class="grid-item">60</div>
+    <div class="grid-item">61</div>
+    <div class="grid-item">62</div>
+    <div class="grid-item">63</div>  
+    <div class="grid-item">64</div>
+    <div class="grid-item">65</div>
+    <div class="grid-item">66</div>  
+    <div class="grid-item">67</div>
+    <div class="grid-item">68</div>
+    <div class="grid-item">69</div>
+    <div class="grid-item">70</div>
+    <div class="grid-item">71</div>
+    <div class="grid-item">72</div>
+    <div class="grid-item">73</div>  
+    <div class="grid-item">74</div>
+    <div class="grid-item">75</div>
+    <div class="grid-item">76</div>  
+    <div class="grid-item">77</div>
+    <div class="grid-item">78</div>
+    <div class="grid-item">79</div>
+    <div class="grid-item">80</div>
+    <div class="grid-item">81</div>
+    <div class="grid-item">82</div>
+    <div class="grid-item">83</div>  
+    <div class="grid-item">84</div>
+    <div class="grid-item">85</div>
+    <div class="grid-item">86</div>  
+    <div class="grid-item">87</div>
+    <div class="grid-item">88</div>
+    <div class="grid-item">89</div>
+    <div class="grid-item">90</div>
+    <div class="grid-item">91</div>
+    <div class="grid-item">92</div>
+    <div class="grid-item">93</div>  
+    <div class="grid-item">94</div>
+    <div class="grid-item">95</div>
+    <div class="grid-item">96</div>  
+    <div class="grid-item">97</div>
+    <div class="grid-item">98</div>
+    <div class="grid-item">99</div>
+    <div class="grid-item">100</div>
+</div>
+
+<h1>Red:</h1>
+
+<div class="slidecontainer">
+  <input type="range" min="0" max="255" value="10" class="slider" id="redRange">
+  <p>Value: <span id="redValue"></span></p>
+</div>
+
+<h1>Green:</h1>
+
+<div class="slidecontainer">
+        <input type="range" min="0" max="255" value="10" class="slider" id="greenRange">
+        <p>Value: <span id="greenValue"></span></p>
+</div>
+
+<h1>Blue:</h1>
+
+<div class="slidecontainer">
+            <input type="range" min="0" max="255" value="10" class="slider" id="blueRange">
+            <p>Value: <span id="blueValue"></span></p>
+</div>
+
+<script>
+var slider = document.getElementById("redRange");
+var output = document.getElementById("redValue");
+output.innerHTML = slider.value;
+
+slider.oninput = function() 
+  {
+  output.innerHTML = this.value;
+  }
+
+var slider2 = document.getElementById("greenRange");
+var output2 = document.getElementById("greenValue");
+output2.innerHTML = slider2.value;
+
+slider2.oninput = function() 
+  {
+  output2.innerHTML = this.value;
+  }
+
+var slider3 = document.getElementById("blueRange");
+var output3 = document.getElementById("blueValue");
+output3.innerHTML = slider3.value;
+
+slider3.oninput = function() 
+  {
+  output3.innerHTML = this.value;
+  }
+
+    var rgbToHex = function (rgb) { 
+    var hex = Number(rgb).toString(16);
+    if (hex.length < 2) {
+         hex = "0" + hex;
+    }
+    return hex;
+  };
+
+      var fullColorHex = function(r,g,b) {   
+      var red = rgbToHex(r);
+      var green = rgbToHex(g);
+      var blue = rgbToHex(b);
+      return red+green+blue;
+    };
+
+  var redArray = [];
+  var greenArray = [];
+  var blueArray = [];
+
+      var grid = document.getElementsByClassName('grid-item');
+      Array.from(grid).forEach(v => v.addEventListener('click', function() 
+      {
+        var red = document.getElementById("redRange").value;
+        var green = document.getElementById("greenRange").value;
+        var blue = document.getElementById("blueRange").value;
+        var currentColor = fullColorHex(red, green, blue);
+
+        var vNum = parseInt(v.innerHTML);
+        redArray[vNum - 1] = red;
+        greenArray[vNum - 1] = green;
+        blueArray[vNum - 1] = blue;
+
+        v.style.background = "#" + currentColor;
+      }));
+</script>
+
+</body>
+</html>
