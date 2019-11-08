@@ -147,8 +147,8 @@ wsConnect(url)
 }
 
 // Call this to connect to the WebSocket server
-function wsConnect(url) {
-    
+function wsConnect(url) 
+{
     // Connect to WebSocket server
     websocket = new WebSocket(url);
     
@@ -163,24 +163,15 @@ function wsConnect(url) {
 function onOpen(evt) 
 {
     // Log connection state
-    console.log("Connected");
-    
-    // Enable button
-    button.disabled = false;
-    
-    // Get the current state of the LED
-    doSend("getLEDState");
+    console.log("Websocket Connected");
 }
  
 // Called when the WebSocket connection is closed
 function onClose(evt) 
 {
     // Log disconnection state
-    console.log("Disconnected");
-    
-    // Disable button
-    button.disabled = true;
-    
+    console.log("Websocket Disconnected");
+
     // Try to reconnect after a few seconds
     setTimeout(function() { wsConnect(url) }, 2000);
 }
@@ -190,6 +181,7 @@ function onMessage(evt)
 {
     // Print out our received message
     console.log("Received: " + evt.data);
+    document.getElementById("demo").innerHTML = evt.data;
 }
  
 // Called when a WebSocket error occurs
@@ -211,7 +203,8 @@ function SendText()
 {
   // Socket.send(document.getElementById("txBar").value);
   // document.getElementById("txBar").value = "";
-  websocket.send("test text");
+  websocket.send("readarray JSON.stringified" + JSON.stringify(redArray));
+  websocket.send("just red array: " + redArray);
   document.getElementById("demo").innerHTML = test++;
 }
 

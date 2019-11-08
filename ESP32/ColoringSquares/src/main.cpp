@@ -15,8 +15,7 @@ const int ws_port = 81;
 // Globals
 AsyncWebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(ws_port);
-
-char msg_buf[2000];
+uint8_t test = 1;
 
 // Callback: receiving any WebSocket message
 void onWebSocketEvent(uint8_t client_num,
@@ -119,4 +118,10 @@ void setup()
 void loop()
 {
   webSocket.loop();
+
+  if (millis() > 10000 && test > 0)
+  {
+    test = 0;
+    webSocket.broadcastTXT("That's the way");
+  }
 }
