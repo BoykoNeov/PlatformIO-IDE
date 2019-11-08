@@ -129,20 +129,90 @@
     <p>Value: <span id="blueValue"></span></p>
 </div>
 
+<div>
+  <button onclick="SendText()">Click me</button>
+</div>
+
+<p id="demo">test</p>
+
 <script>
 
 // Initialize websocket
 var socket;
+var url = "ws://" + window.location.hostname + ":81/"
+
 function init() 
 {
-socket = new WebSocket("ws://" + window.location.hostname + ":81/");
+wsConnect(url)
 }
 
-//TODO
-function sendText() 
+// Call this to connect to the WebSocket server
+function wsConnect(url) {
+    
+    // Connect to WebSocket server
+    websocket = new WebSocket(url);
+    
+    // Assign callbacks
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+}
+ 
+// Called when a WebSocket connection is established with the server
+function onOpen(evt) 
 {
-  Socket.send(document.getElementById("txBar").value);
-  document.getElementById("txBar").value = "";
+    // Log connection state
+    console.log("Connected");
+    
+    // Enable button
+    button.disabled = false;
+    
+    // Get the current state of the LED
+    doSend("getLEDState");
+}
+ 
+// Called when the WebSocket connection is closed
+function onClose(evt) 
+{
+    // Log disconnection state
+    console.log("Disconnected");
+    
+    // Disable button
+    button.disabled = true;
+    
+    // Try to reconnect after a few seconds
+    setTimeout(function() { wsConnect(url) }, 2000);
+}
+ 
+// Called when a message is received from the server
+function onMessage(evt) 
+{
+    // Print out our received message
+    console.log("Received: " + evt.data);
+}
+ 
+// Called when a WebSocket error occurs
+function onError(evt)
+{
+    console.log("ERROR: " + evt.data);
+}
+ 
+// Sends a message to the server (and prints it to the console)
+function doSend(message) 
+{
+    console.log("Sending: " + message);
+    websocket.send(message);
+}
+
+test = 1;
+
+function SendText() 
+{
+  // Socket.send(document.getElementById("txBar").value);
+  // document.getElementById("txBar").value = "";
+  websocket.send("test text");
+  document.getElementById("demo").innerHTML = test++;
 }
 
 var slider = document.getElementById("redRange");
