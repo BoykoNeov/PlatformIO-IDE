@@ -2,8 +2,23 @@
 
 #include <Arduino.h>
 #include <driver/rmt.h>
+#include "soc/rtc_wdt.h"
 
 #define Output_Pin  GPIO_NUM_4
+
+String interruptTriggered = "0";
+
+
+static DRAM_ATTR const uint32_t tx_thr_event_offsets [] = {
+  static_cast<uint32_t>(1) << (24 + 0),
+  static_cast<uint32_t>(1) << (24 + 1),
+  static_cast<uint32_t>(1) << (24 + 2),
+  static_cast<uint32_t>(1) << (24 + 3),
+  static_cast<uint32_t>(1) << (24 + 4),
+  static_cast<uint32_t>(1) << (24 + 5),
+  static_cast<uint32_t>(1) << (24 + 6),
+  static_cast<uint32_t>(1) << (24 + 7),
+};
  
 // Reference https://esp-idf.readthedocs.io/en/v1.0/api/rmt.html
  
@@ -12,9 +27,30 @@ rmt_item32_t items[32];
 const rmt_item32_t SK6812_low {3, 1, 9, 0};
 const rmt_item32_t SK6812_high {6, 1, 6, 0};
 const rmt_item32_t SK6812_reset {0, 0, 800, 0};
+
+static intr_handle_t rmt_intr_handle = nullptr;
+
+void IRAM_ATTR handleRMTinterrupt(void *arg)
+{
+  if (RMT.int_st.ch0_tx_thr_event) 
+  {
+    RMT.int_clr.ch0_tx_thr_event = 1;
+    // RMT.int_clr.val |= tx_thr_event_offsets[0];
+    interruptTriggered = "1";
+    Serial.println("th");
+  }
+  else if(RMT.int_st.ch0_tx_end)
+  {
+    Serial.println("en");
+    RMT.int_clr.ch0_tx_end = 1;
+  }
+
+  return;
+}
  
  
-void setup() {
+void setup() 
+{
   // put your setup code here, to run once:
   config.rmt_mode = RMT_MODE_TX;
   config.channel = RMT_CHANNEL_0;
@@ -22,12 +58,23 @@ void setup() {
   config.mem_block_num = 1;
   config.tx_config.loop_en = 0;
   config.tx_config.carrier_en = 0;
-  config.tx_config.idle_output_en = 1;
+  config.tx_config.idle_output_en = 0;
   config.tx_config.idle_level = RMT_IDLE_LEVEL_LOW;
-  config.tx_config.carrier_level = RMT_CARRIER_LEVEL_HIGH;
+  config.tx_config.carrier_level = RMT_CARRIER_LEVEL_LOW;
   config.clk_div = 8; // 80MHz / clk_div
- 
   rmt_config(&config);
+
+  rmt_set_tx_intr_en(static_cast<rmt_channel_t>(RMT_CHANNEL_0), true);
+
+  // Specifies the number of transmit items at which the interrupt is triggered
+  rmt_set_tx_thr_intr_en(static_cast<rmt_channel_t>(RMT_CHANNEL_0), true, 16);  
+
+  RMT.int_ena.ch0_tx_thr_event = 1;
+ // RMT.int_clr.val |= tx_thr_event_offsets[0];
+
+  esp_intr_alloc(ETS_RMT_INTR_SOURCE, 0, handleRMTinterrupt, nullptr, &rmt_intr_handle);
+
+  // Interrupt allocations should be placed before driver install
   rmt_driver_install(config.channel, 0, 0);  //  rmt_driver_install(rmt_channel_t channel, size_t rx_buf_size, int rmt_intr_num)
    
 Serial.begin(115200);
@@ -45,39 +92,30 @@ Serial.begin(115200);
 
 
 void loop() {
-  uint8_t randomValues[32];
 
-  for (size_t i = 0; i < 24; i++)
-  {
-    randomValues[i] = (uint8_t)(esp_random() % 2);
-  }
+  delay(1);
+  
+  Serial.println("loop" + interruptTriggered);
 
-rmt_item32_t leds[30 * 32 ];
+    uint32_t rmtItemsSize = 32;
+    rmt_item32_t rmtItems[rmtItemsSize];
+    rmt_item32_t rmtItems2[rmtItemsSize];
 
-  for (size_t j = 0; j < sizeof(leds); j++)
-  {
-      if (randomValues[j % 32] % 32 == 1)
-      {
-          leds[j] = SK6812_high;
-      }
-      else
-      {
-          leds[j] = SK6812_low;
-      }   
+    for (size_t i = 0; i < rmtItemsSize; i++)
+    {
+        rmtItems[i] = SK6812_low;
+        rmtItems2[i] = SK6812_high;
     }
 
-  uint32_t start;
-  uint32_t end;
-  
-  start = micros();
-  for (size_t i = 0; i < sizeof(leds); i++)
-  {
-    // esp_err_t rmt_write_items(rmt_channel_t channel, rmt_item32_t *rmt_item, int item_num, bool wait_tx_done)
-    rmt_write_items(config.channel, leds, sizeof(leds), 0);
-  }
-  end = micros();
+        rmt_fill_tx_items(RMT_CHANNEL_0, rmtItems, 16, 0);
+        rmt_fill_tx_items(RMT_CHANNEL_0, rmtItems2, 16, 16);
+        rmt_tx_start(RMT_CHANNEL_0,1);
 
- Serial.println(start - end);
+        delay(1);
+        rmt_tx_stop(RMT_CHANNEL_0);
 
-  delay(4000);
+        // RMT.int_clr.val.chN_event_name
+        // RMT.int_clr.ch0_tx_thr_event = 1;
+
+delay(1000);
 }
