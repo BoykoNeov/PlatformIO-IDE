@@ -7,18 +7,6 @@
 #define Output_Pin  GPIO_NUM_4
 
 String interruptTriggered = "0";
-
-
-// static DRAM_ATTR const uint32_t tx_thr_event_offsets [] = {
-//   static_cast<uint32_t>(1) << (24 + 0),
-//   static_cast<uint32_t>(1) << (24 + 1),
-//   static_cast<uint32_t>(1) << (24 + 2),
-//   static_cast<uint32_t>(1) << (24 + 3),
-//   static_cast<uint32_t>(1) << (24 + 4),
-//   static_cast<uint32_t>(1) << (24 + 5),
-//   static_cast<uint32_t>(1) << (24 + 6),
-//   static_cast<uint32_t>(1) << (24 + 7),
-// };
  
 // Reference https://esp-idf.readthedocs.io/en/v1.0/api/rmt.html
  
