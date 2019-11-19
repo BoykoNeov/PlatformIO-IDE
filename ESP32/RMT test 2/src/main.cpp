@@ -67,7 +67,7 @@ void setup()
   rmt_set_tx_intr_en(static_cast<rmt_channel_t>(RMT_CHANNEL_0), true);
 
   // Specifies the number of transmit items at which the interrupt is triggered
-  rmt_set_tx_thr_intr_en(static_cast<rmt_channel_t>(RMT_CHANNEL_0), true, 16);  
+  rmt_set_tx_thr_intr_en(static_cast<rmt_channel_t>(RMT_CHANNEL_0), true, 16);
 
   RMT.int_ena.ch0_tx_thr_event = 1;
  // RMT.int_clr.val |= tx_thr_event_offsets[0];
