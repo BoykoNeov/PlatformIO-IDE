@@ -83,6 +83,7 @@ void ws2812_copy()
 {
   unsigned int i, j, offset, len, bit;
 
+  RMTMEM.chan[0].data32[0].
 
   offset = ws2812_half * MAX_PULSES;
   ws2812_half = !ws2812_half;
