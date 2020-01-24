@@ -36,35 +36,42 @@ void loop()
     // Display time in micros of one cycle
     Serial.println(endOfCycle - startOfCycle);
 
-    delay(2000);
+    delay(5000);
 
     for (uint8_t i = 0; i < LED_COUNT; i++)
     {
         strip.SetPixelColor(i, {0, 255, 0, 0});
     }
     strip.Show();
-    delay(2000);
+    delay(5000);
 
     for (uint8_t i = 0; i < LED_COUNT; i++)
     {
         strip.SetPixelColor(i, {0, 0, 255, 0});
     }
     strip.Show();
-   delay(2000);
+   delay(5000);
 
     for (uint8_t i = 0; i < LED_COUNT; i++)
     {
         strip.SetPixelColor(i, {0, 0, 0, 255});
     }
     strip.Show();
-   delay(2000);
+   delay(5000);
 
     for (uint8_t i = 0; i < LED_COUNT; i++)
     {
         strip.SetPixelColor(i, {255, 255, 255, 255});
     }
     strip.Show();
-   delay(2000);
+   delay(5000);
+
+       for (uint8_t i = 0; i < LED_COUNT; i++)
+    {
+        strip.SetPixelColor(i, {(char)random(0,256), (char)random(0,256), (char)random(0,256), 0});
+    }
+    strip.Show();
+    delay(5000);
 
     strip.ClearTo(black);
     strip.Show();
