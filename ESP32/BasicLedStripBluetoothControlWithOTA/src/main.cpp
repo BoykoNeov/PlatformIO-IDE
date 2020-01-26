@@ -106,6 +106,6 @@ void loop()
   if (bluetoothInput != NULL)
   {
     Serial.println(bluetoothInput);
-    SetStripColorFromBT(bluetoothInput[0]);
+    SetStripColorFromBT(bluetoothInput);
   }
 }

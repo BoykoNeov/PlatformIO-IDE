@@ -17,39 +17,118 @@ void InitializeStrip()
     strip.Show();
 }
 
-void SetStripColorFromBT(char inputChar)
+void SetStripColorFromBT(char* str)
 {
+    // do nothing if receive empty
+    if (*str == '\0')
+    {
+        return;
+    }
+
+    char *splittedInputs[sizeof(strtok(str, " "))];
+
+    int8_t countWhiteSpaces = 0;
+
+    char currentChar = 1;
+    uint8_t currentCharCounter = 0;
+
+    // Counts white spaces in the input in order to determine the number of resulting variables
+    while (currentChar != '\0')
+    {
+        currentChar = *(str + currentCharCounter);
+
+        if (currentChar == ' ')
+        {
+            countWhiteSpaces++;
+        }
+
+        currentCharCounter++;
+    }
+    
+
+    if(sizeof(splittedInputs) > 0)
+    {
+        splittedInputs[0] = strtok(str, " "); // Splits spaces between words in str
+
+        for(int i = 1; i < sizeof(strtok(str, " ")); i++)
+        {
+            splittedInputs[i] = strtok (NULL, " ");
+        }
+    }
+
     char green = 0;
     char red = 0;
     char blue = 0;
     char white = 0;
 
-    if (inputChar == 'g')
-    {
-        green = 255;
-    }
+    char inputChar = splittedInputs[0][0];
 
-    if (inputChar == 'r')
+    if (!(inputChar >= 48 && inputChar <= 57))
     {
-        red = 255;
-    }
+        if (inputChar == 'g')
+        {
+            green = 255;
+        }
 
-        if (inputChar == 'b')
+        if (inputChar == 'r')
+        {
+            red = 255;
+        }
+
+            if (inputChar == 'b')
+        {
+            blue = 255;
+        }
+
+            if (inputChar == 'w')
+        {
+            white = 255;
+        }
+
+        for (size_t i = 0; i < LED_COUNT; i++)
+        {
+            RgbwColor currentColor = {red, green, blue, white};
+            strip.SetPixelColor(i, currentColor);
+        }
+
+        strip.Show();
+    }
+    else
     {
-        blue = 255;
-    }
+        // Serial.println(sizeof(&str));  // the pointer itself = 4 bytes
+        // Serial.println(sizeof(*str)); // the first char element? 1 byte
 
-        if (inputChar == 'w')
-    {
-        white = 255;
-    }
+        // If you dont do this check and try to do atol on a non existing element, the microcontroller crashes
+        if (countWhiteSpaces >= 0)
+        {
+            red = (char)atoi(splittedInputs[0]);
+            countWhiteSpaces--;
+        }
 
-    for (size_t i = 0; i < LED_COUNT; i++)
-    {
-        RgbwColor currentColor = {red, green, blue, white};
-        strip.SetPixelColor(i, currentColor);
-    }
+        if (countWhiteSpaces >= 0)
+        {
+            green = (char)atoi(splittedInputs[1]);
+            countWhiteSpaces--;
+        }
 
-    strip.Show();
-    
-}
+        if (countWhiteSpaces >= 0)
+        {
+            blue = (char)atoi(splittedInputs[2]);
+            countWhiteSpaces--;
+        }
+
+        if (countWhiteSpaces >= 0)
+        {
+            white = (char)atoi(splittedInputs[3]);
+            countWhiteSpaces--;
+        }
+
+        for (size_t i = 0; i < LED_COUNT; i++)
+        {
+            RgbwColor currentColor = {red, green, blue, white};
+            strip.SetPixelColor(i, currentColor);
+        }
+
+        strip.Show();
+    }
+  }
